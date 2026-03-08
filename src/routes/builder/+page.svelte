@@ -8,7 +8,6 @@
 		RemoveVar,
 		Section
 	} from '$lib/core/builder';
-	import { slide, fade } from 'svelte/transition';
 
 	let graph = $state<Project>({
 		id: 'root',
