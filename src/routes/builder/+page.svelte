@@ -1,143 +1,50 @@
-<script lang="ts">
-	import type {
-		CreateAction,
-		CreateVar,
-		Option,
-		Project,
-		RemoveAction,
-		RemoveVar,
-		Section
-	} from '$lib/core/builder';
+<script>
+	import { Background, BackgroundVariant, SvelteFlow, Controls, MiniMap } from '@xyflow/svelte';
 
-	let graph = $state<Project>({
-		id: 'root',
-		name: 'New Project',
-		version: '0.0.1',
-		variables: {},
-		sections: []
-	});
-	let counter = $state(0);
+	// CSS import is required for default styling
+	import '@xyflow/svelte/dist/style.css';
 
-	const createSection = (value?: Section) => {
-		counter += 1;
-		if (value) {
-			graph.sections.push(value);
-			return;
+	// 1. Initialize nodes and edges using the $state rune
+	let nodes = $state([
+		{
+			id: '1',
+			type: 'input',
+			data: { label: 'Svelte 5 Node' },
+			position: { x: 250, y: 0 }
+		},
+		{
+			id: '2',
+			data: { label: 'Reactive State' },
+			position: { x: 100, y: 100 }
+		},
+		{
+			id: '3',
+			type: 'output',
+			data: { label: 'Output' },
+			position: { x: 400, y: 100 }
 		}
-		graph.sections.push({
-			id: 'section_' + counter,
-			name: '',
-			variables: {},
-			visible: [],
-			enabled: [],
-			options: [],
-			subsections: [],
-			target: ''
-		});
-	};
-	const removeSection = (section_index: number) => {
-		graph.sections.splice(section_index, 1);
-	};
-	const createOption = (section_index: number, value?: Option) => {
-		counter += 1;
-		if (value) {
-			graph.sections[section_index].options.push(value);
-			return;
-		}
-		graph.sections[section_index].options.push({
-			id: 'option_' + counter,
-			name: '',
-			visible: [],
-			enabled: [],
-			set: [],
-			target: ''
-		});
-	};
-	const removeOption = (section_index: number, option_index: number) => {
-		graph.sections[section_index].options.splice(option_index, 1);
-	};
-	const createVariable = (query: CreateVar) => {
-		if (query.at === 'root') {
-			if (query.value) {
-				graph.variables[query.name] = query.value;
-				return;
-			}
-			graph.variables[query.name] = { type: 'number', current: 0 };
-		}
-		if (query.at === 'section' && typeof query.section_index === 'number') {
-			if (query.value) {
-				graph.sections[query.section_index].variables[query.name] = query.value;
-				return;
-			}
-			graph.sections[query.section_index].variables[query.name] = { type: 'number', current: 0 };
-		}
-	};
-	const removeVariable = (query: RemoveVar) => {
-		if (query.at === 'root') {
-			delete graph.variables[query.name];
-		}
-		if (query.at === 'section' && typeof query.section_index === 'number') {
-			delete graph.sections[query.section_index].variables[query.name];
-		}
-	};
-	const createActionConstraint = (query: CreateAction) => {
-		if (query.at === 'section') {
-			if (query.value) {
-				if (query.action === 'target' && typeof query.value === 'string') {
-					graph.sections[query.section_index][query.action] = query.value;
-				}
-				if (query.action !== 'target' && typeof query.value !== 'string') {
-					graph.sections[query.section_index][query.action].push(query.value);
-				}
-				return;
-			}
-			if (query.action === 'target') {
-				graph.sections[query.section_index][query.action] = '';
-			}
-			if (query.action !== 'target') {
-				graph.sections[query.section_index][query.action] = [];
-			}
-		}
-		if (query.at === 'option' && typeof query.option_index === 'number') {
-			if (query.value) {
-				if (query.action === 'target' && typeof query.value === 'string') {
-					graph.sections[query.section_index].options[query.option_index][query.action] =
-						query.value;
-				}
-				if (query.action !== 'target' && typeof query.value !== 'string') {
-					graph.sections[query.section_index].options[query.option_index][query.action].push(
-						query.value
-					);
-				}
-				return;
-			}
-			if (query.action === 'target') {
-				graph.sections[query.section_index].options[query.option_index][query.action] = '';
-			}
-			if (query.action !== 'target') {
-				graph.sections[query.section_index].options[query.option_index][query.action] = [];
-			}
-		}
-	};
-	const removeActionConstraint = (query: RemoveAction) => {
-		if (query.at === 'section') {
-			if (query.action === 'target') {
-				graph.sections[query.section_index][query.action] = '';
-			}
-			if (query.action !== 'target') {
-				graph.sections[query.section_index][query.action] = [];
-			}
-		}
-		if (query.at === 'option' && typeof query.option_index === 'number') {
-			if (query.action === 'target') {
-				graph.sections[query.section_index].options[query.option_index][query.action] = '';
-			}
-			if (query.action !== 'target' && typeof query.action_index === 'number') {
-				graph.sections[query.section_index].options[query.option_index][query.action].splice(
-					query.action_index,
-					1
-				);
-			}
-		}
-	};
+	]);
+
+	let edges = $state([
+		{ id: 'e1-2', source: '1', target: '2', animated: true },
+		{ id: 'e1-3', source: '1', target: '3' }
+	]);
 </script>
+
+<main class="h-screen w-full bg-slate-950 font-sans">
+	<SvelteFlow 
+		{nodes} 
+		{edges} 
+		fitView 
+		colorMode="dark"
+	>
+		<Background 
+			variant={BackgroundVariant.Dots} 
+			gap={20} 
+			size={1} 
+			patternColor="#334155" 
+		/>
+		<Controls />
+		<MiniMap />
+	</SvelteFlow>
+</main>
