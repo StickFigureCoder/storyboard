@@ -11,17 +11,16 @@
 </script>
 
 <div class="h-screen w-screen">
-	<SvelteFlow 
-		bind:nodes 
-		bind:edges 
+	<SvelteFlow
+		bind:nodes
+		bind:edges
 		proOptions={{ hideAttribution: true }}
 		panOnDrag={active === 'pan'}
 		selectionOnDrag={active === 'select'}
 	>
 		<Background variant={BackgroundVariant.Dots} bgColor="#101828" patternColor="#f3f4f6" />
-		
+
 		<!-- Drop the toolbar inside SvelteFlow so it has access to the canvas -->
-		<Toolbar bind:active={active} />
-		
+		<Toolbar bind:active />
 	</SvelteFlow>
 </div>
