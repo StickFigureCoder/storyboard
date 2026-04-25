@@ -15,12 +15,10 @@
 		bind:nodes
 		bind:edges
 		proOptions={{ hideAttribution: true }}
-		panOnDrag={active === 'pan'}
+		panOnDrag={active === 'pan' ? true : undefined}
 		selectionOnDrag={active === 'select'}
 	>
 		<Background variant={BackgroundVariant.Dots} bgColor="#101828" patternColor="#f3f4f6" />
-
-		<!-- Drop the toolbar inside SvelteFlow so it has access to the canvas -->
 		<Toolbar bind:active />
 	</SvelteFlow>
 </div>
