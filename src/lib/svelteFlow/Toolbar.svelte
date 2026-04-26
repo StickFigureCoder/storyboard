@@ -67,9 +67,3 @@
 		</button>
 	</div>
 </Panel>
-
-<style>
-	:global(.svelte-flow__panel.bottom.center) {
-		margin-bottom: 0 !important;
-	}
-</style>
