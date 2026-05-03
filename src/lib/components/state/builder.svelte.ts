@@ -1,18 +1,12 @@
 import type { Edge, Node } from '@xyflow/svelte';
 
-let nodes = $state.raw<Node[]>([
-	{
-		id: '0',
-		type: 'screen',
-		data: {
-			label: 'Hello World'
-		},
-		position: { x: 860, y: 440 }
-	}
-]);
+let nodes = $state.raw<Node[]>([]);
 let edges = $state.raw<Edge[]>([]);
-let panOnDrag = $state<boolean>(true);
-let selectionOnDrag = $state<boolean>(false);
+
+let canvasMode = $state('pan');
+
+let panOnDrag = $derived<boolean>(canvasMode === 'pan');
+let selectionOnDrag = $state<boolean>(canvasMode === 'selection');
 let zoomOnDoubleClick = $state<boolean>(false);
 
 export const board = {
@@ -45,6 +39,12 @@ export const board = {
 	},
 	set zoomOnDoubleClick(v) {
 		zoomOnDoubleClick = v;
+	},
+	get canvasMode() {
+		return canvasMode;
+	},
+	set canvasMode(v) {
+		canvasMode = v;
 	}
 };
 
