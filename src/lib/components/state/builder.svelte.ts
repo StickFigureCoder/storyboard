@@ -7,20 +7,12 @@ let nodes = $state.raw<Node[]>([
 		data: {
 			label: 'Hello World'
 		},
-		position: { x: 300, y: 300 }
-	},
-	{
-		id: '1',
-		type: 'screen',
-		data: {
-			label: 'Hello World'
-		},
-		position: { x: 500, y: 300 }
+		position: { x: 860, y: 440 }
 	}
 ]);
 let edges = $state.raw<Edge[]>([]);
-let panOnDrag = $state<boolean>(false);
-let selectionOnDrag = $state<boolean>(true);
+let panOnDrag = $state<boolean>(true);
+let selectionOnDrag = $state<boolean>(false);
 let zoomOnDoubleClick = $state<boolean>(false);
 
 export const board = {
@@ -117,41 +109,41 @@ export const deleteSelected = () => {
 
 // Event Handlers
 // GLOBAL & LIFECYCLE
-export const onInit = console.log;
-export const onError = console.log;
-export const onDBLClick = console.log;
+export const onInit = () => {}; // console.log;
+export const onError = () => {}; // console.log;
+export const onDBLClick = () => {}; // console.log;
 
 // NODES
-export const onNodeClick = console.log;
-export const onNodeContextMenu = console.log;
-export const onNodeDragStart = console.log;
-export const onNodeDragStop = console.log;
+export const onNodeClick = () => {}; // console.log;
+export const onNodeContextMenu = () => {}; // console.log;
+export const onNodeDragStart = () => {}; // console.log;
+export const onNodeDragStop = () => {}; // console.log;
 
 // EDGES
-export const onEdgeClick = console.log;
-export const onEdgeContextMenu = console.log;
+export const onEdgeClick = () => {}; // console.log;
+export const onEdgeContextMenu = () => {}; // console.log;
 
 // PANE (BACKGROUND)
-export const onPaneClick = console.log;
-export const onPaneContextMenu = console.log;
+export const onPaneClick = () => {}; // console.log;
+export const onPaneContextMenu = () => {}; // console.log;
 
 // CONNECTIONS
-export const onConnectStart = console.log;
-export const onConnect = console.log;
-export const onConnectEnd = console.log;
+export const onConnectStart = () => {}; // console.log;
+export const onConnect = () => {}; // console.log;
+export const onConnectEnd = () => {}; // console.log;
 
 // SELECTIONS
-export const onSelectionClick = console.log;
-export const onSelectionContextMenu = console.log;
-export const onSelectionStart = console.log;
-export const onSelectionEnd = console.log;
-export const onSelectionChange = console.log;
-export const onSelectionDragStart = console.log;
-export const onSelectionDragStop = console.log;
+export const onSelectionClick = () => {}; // console.log;
+export const onSelectionContextMenu = () => {}; // console.log;
+export const onSelectionStart = () => {}; // console.log;
+export const onSelectionEnd = () => {}; // console.log;
+export const onSelectionChange = () => {}; // console.log;
+export const onSelectionDragStart = () => {}; // console.log;
+export const onSelectionDragStop = () => {}; // console.log;
 
 // VIEWPORT / MOVEMENT
-export const onMoveStart = console.log;
-export const onMoveEnd = console.log;
+export const onMoveStart = () => {}; // console.log;
+export const onMoveEnd = () => {}; // console.log;
 
 // STATE / DELETION
-export const onDelete = console.log;
+export const onDelete = () => {}; // console.log;
