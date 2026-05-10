@@ -12,8 +12,8 @@ class Builder {
 	constructor() {
 		console.info('Builder Initilized Successfullty');
 	}
-
-	addNode = (node: Node) => {
+	addNode = (data: Omit<Node, 'id'>) => {
+		const node: Node = { ...data, id: crypto.randomUUID() };
 		this.nodes = [...this.nodes, node];
 	};
 	addEdge = (edge: Edge) => {
@@ -89,7 +89,7 @@ class Builder {
 	onPaneClick = () => {
 		this.ctxMenuMode = null;
 	}; // console.log;
-	onPaneContextMenu = ({ event }:{ event: MouseEvent }) => {		
+	onPaneContextMenu = ({ event }: { event: MouseEvent }) => {
 		event.preventDefault();
 		this.ctxMenuMode = {
 			type: 'panel',

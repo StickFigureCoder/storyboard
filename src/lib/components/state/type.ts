@@ -14,25 +14,28 @@ interface Position {
 
 export interface BaseContextMenuMode {
 	type: string;
-	pos: Position;
 }
 
 export interface NodeContextMenuMode extends BaseContextMenuMode {
 	type: 'node';
+	pos: Position;
 	node: Node;
 }
 
 export interface EdgeContextMenuMode extends BaseContextMenuMode {
 	type: 'edge';
+	pos: Position;
 	node: Edge;
 }
 
 export interface PanelContextMenuMode extends BaseContextMenuMode {
 	type: 'panel';
+	pos: Position;
 }
 
 export interface SelectionContextMenuMode extends BaseContextMenuMode {
 	type: 'selection';
+	pos: Position;
 }
 
 export type ToolbarMode = SelectionToolbarMode | PanToolbarMode;

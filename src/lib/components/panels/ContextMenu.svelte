@@ -17,8 +17,9 @@
 		Ungroup
 	} from '@lucide/svelte';
 
-	import { outsideclick } from '$lib/hooks/outsideclick';
+	import { outsideclick } from '$lib/hooks/outsideclick.svelte';
 	import { builder } from '../state/builder.svelte';
+	import type { ScreenNode } from '../Nodes/Screen/type';
 
 	type IconComponent = Component<LucideProps>;
 	interface MenuItem {
@@ -35,84 +36,48 @@
 	type MenuEntry = MenuItem | MenuSeparator;
 	type ContextType = 'node' | 'edge' | 'panel' | 'selection';
 
-	function isSeparator(entry: MenuEntry): entry is MenuSeparator {
-		return 'separator' in entry;
-	}
-
-	let isOpen = $derived(!!builder.ctxMenuMode);
-	let position = $derived(builder.ctxMenuMode?.pos || { x: 200, y: 200 });
-	let contextType = $derived(builder.ctxMenuMode?.type);
-	let targetLabel = $derived(builder.ctxMenuMode?.type);
-
-	const onClose = () => {		
-		builder.ctxMenuMode = null;
-	};
-
-	const onAction = (action: string) => {
-		console.log(action);
-	};
-
+	// prettier-ignore
 	const nodeMenu: MenuEntry[] = [
-		{ label: 'Edit label', iconLeft: Pencil, onClick: () => onAction('edit-label') },
-		{ label: 'Duplicate', iconLeft: Copy, shortcut: '⌘D', onClick: () => onAction('duplicate') },
-		{ label: 'Connect from here', iconLeft: ArrowRightLeft, onClick: () => onAction('connect') },
-		{ separator: true },
-		{ label: 'Lock position', iconLeft: Lock, onClick: () => onAction('lock') },
-		{ label: 'Hide node', iconLeft: EyeOff, onClick: () => onAction('hide') },
-		{ label: 'Fit to node', iconLeft: Maximize2, onClick: () => onAction('fit') },
-		{ separator: true },
-		{
-			label: 'Delete node',
-			iconLeft: Trash2,
-			shortcut: '⌫',
-			danger: true,
-			onClick: () => onAction('delete')
-		}
+		{ label: 'Edit label',        iconLeft: Pencil,          onClick: () => onAction('edit-label')                               },
+		{ label: 'Duplicate',         iconLeft: Copy,            onClick: () => onAction('duplicate'),  shortcut: '⌘D',             },
+		{ separator: true                                                                                                            },
+		{ label: 'Connect from here', iconLeft: ArrowRightLeft,  onClick: () => onAction('connect')                                  },
+		{ label: 'Lock position',     iconLeft: Lock,            onClick: () => onAction('lock')                                     },
+		{ label: 'Hide node',         iconLeft: EyeOff,          onClick: () => onAction('hide')                                     },
+		{ label: 'Fit to node',       iconLeft: Maximize2,       onClick: () => onAction('fit')                                      },
+		{ separator: true                                                                                                            },
+		{ label: 'Delete node',       iconLeft: Trash2,          onClick: () => onAction('delete'),     shortcut: '⌫', danger: true }
 	];
 
+	// prettier-ignore
 	const edgeMenu: MenuEntry[] = [
-		{ label: 'Edit label', iconLeft: Pencil, onClick: () => onAction('edit-label') },
-		{ label: 'Reverse direction', iconLeft: ArrowRightLeft, onClick: () => onAction('reverse') },
-		{ separator: true },
-		{
-			label: 'Delete edge',
-			iconLeft: Trash2,
-			shortcut: '⌫',
-			danger: true,
-			onClick: () => onAction('delete')
-		}
+		{ label: 'Edit label',        iconLeft: Pencil,          onClick: () => onAction('edit-label')                               },
+		{ label: 'Reverse direction', iconLeft: ArrowRightLeft,  onClick: () => onAction('reverse')                                  },
+		{ separator: true                                                                                                            },
+		{ label: 'Delete edge',       iconLeft: Trash2,          onClick: () => onAction('delete'),     shortcut: '⌫', danger: true }
 	];
 
+	// prettier-ignore
 	const panelMenu: MenuEntry[] = [
-		{ label: 'Add node here', iconLeft: FilePlus, onClick: () => onAction('add-node') },
-		{ label: 'Paste', iconLeft: Clipboard, shortcut: '⌘V', onClick: () => onAction('paste') },
-		{ separator: true },
-		{ label: 'Auto layout', iconLeft: LayoutGrid, onClick: () => onAction('auto-layout') },
-		{
-			label: 'Fit view',
-			iconLeft: Maximize2,
-			shortcut: '⌘⇧F',
-			onClick: () => onAction('fit-view')
-		},
-		{ separator: true },
-		{ label: 'Select all', iconLeft: Group, shortcut: '⌘A', onClick: () => onAction('select-all') }
+		{ label: 'Add node here',     iconLeft: FilePlus,        onClick: () => onAction('add-node')                                 },
+		{ label: 'Paste',             iconLeft: Clipboard,       onClick: () => onAction('paste'),      shortcut: '⌘V',             },
+		{ separator: true                                                                                                            },
+		{ label: 'Auto layout',       iconLeft: LayoutGrid,      onClick: () => onAction('auto-layout')                              },
+		{ label: 'Fit view',          iconLeft: Maximize2,       onClick: () => onAction('fit-view'),   shortcut: '⌘⇧F'             },
+		{ separator: true                                                                                                            },
+		{ label: 'Select all',        iconLeft: Group,           onClick: () => onAction('select-all'), shortcut: '⌘A'              }
 	];
 
+	// prettier-ignore
 	const selectionMenu: MenuEntry[] = [
-		{ label: 'Copy', iconLeft: Copy, shortcut: '⌘C', onClick: () => onAction('copy') },
-		{ label: 'Duplicate', iconLeft: Copy, shortcut: '⌘D', onClick: () => onAction('duplicate') },
-		{ label: 'Group', iconLeft: Group, onClick: () => onAction('group') },
-		{ label: 'Ungroup', iconLeft: Ungroup, onClick: () => onAction('ungroup') },
-		{ separator: true },
-		{ label: 'Align centers', iconLeft: TextAlignCenter, onClick: () => onAction('align') },
-		{ separator: true },
-		{
-			label: 'Delete selection',
-			iconLeft: Trash2,
-			shortcut: '⌫',
-			danger: true,
-			onClick: () => onAction('delete')
-		}
+		{ label: 'Copy',              iconLeft: Copy,            onClick: () => onAction('copy'),       shortcut: '⌘C',             },
+		{ label: 'Duplicate',         iconLeft: Copy,            onClick: () => onAction('duplicate'),  shortcut: '⌘D',             },
+		{ label: 'Group',             iconLeft: Group,           onClick: () => onAction('group')                                    },
+		{ label: 'Ungroup',           iconLeft: Ungroup,         onClick: () => onAction('ungroup'),                                 },
+		{ separator: true                                                                                                            },
+		{ label: 'Align centers',     iconLeft: TextAlignCenter, onClick: () => onAction('align')                                    },
+		{ separator: true                                                                                                            }, 
+		{ label: 'Delete selection',  iconLeft: Trash2,          onClick: () => onAction('delete'),     shortcut: '⌫', danger: true }
 	];
 
 	const menuMap: Record<ContextType, MenuEntry[]> = {
@@ -129,14 +94,49 @@
 		selection: 'Selection'
 	};
 
+	let isOpen = $derived(!!builder.ctxMenuMode);
+	let position = $derived(builder.ctxMenuMode?.pos || { x: 200, y: 200 });
+	let contextType = $derived(builder.ctxMenuMode?.type);
+	let targetLabel = $derived(builder.ctxMenuMode?.type);
+
 	let menuEntries = $derived(menuMap[contextType || 'panel']);
 	let badgeLabel = $derived(badgeMap[contextType || 'panel']);
 
-	function handleItemClick(item: MenuItem) {
+	const isSeparator = (entry: MenuEntry): entry is MenuSeparator => {
+		return 'separator' in entry;
+	};
+
+	const onClose = () => {
+		builder.ctxMenuMode = null;
+	};
+
+	const handleClick = (item: MenuItem) => {
 		if (item.disabled) return;
 		item.onClick?.();
 		onClose();
-	}
+	};
+
+	const onAction = (action: string) => {
+		if (!builder.ctxMenuMode) return;
+
+		const pos = builder.ctxMenuMode.pos;
+
+		switch (action) {
+			case 'add-node': {
+				const data: ScreenNode = {
+					title: 'This is a test',
+					image: { src: '/images/empire.png', alt: "This is the alt" },
+					description: 'This is the description'
+				};
+				builder.addNode({
+					type: 'screen',
+					data,
+					position: pos
+				});
+				break;
+			}
+		}
+	};
 </script>
 
 {#if isOpen}
@@ -172,7 +172,7 @@
 				{:else}
 					<li>
 						<button
-							onclick={() => handleItemClick(entry)}
+							onclick={() => handleClick(entry)}
 							disabled={entry.disabled}
 							class="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors duration-100
 								{entry.disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'}

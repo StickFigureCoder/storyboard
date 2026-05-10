@@ -1,14 +1,8 @@
-import type { NodeProps } from '@xyflow/svelte';
-
-export interface ScreenNodeProps extends NodeProps {
-	data: {
-		screen: {
-			image?: {
-				src: string;
-				alt: string;
-			};
-			title: string;
-			description: string;
-		};
+export interface ScreenNode extends Record<string, unknown> {
+	image?: {
+		src: string;
+		alt: string;
 	};
+	title: string;
+	description: string;
 }

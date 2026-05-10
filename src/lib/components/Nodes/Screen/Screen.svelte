@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { Handle, Position } from '@xyflow/svelte';
-	import type { ScreenNodeProps } from './type';
+	import type { CustomNodeProps } from '..';
+	import type { ScreenNode } from './type';
 
-	let { data, isConnectable }: ScreenNodeProps = $props();
-	let { image, title, description } = $derived(data.screen);
+	let { data, isConnectable }: CustomNodeProps<ScreenNode> = $props();
+	let { image, title, description } = $derived(data);
 </script>
 
 <Handle type="target" position={Position.Left} {isConnectable} class="z-20 h-3 w-3 bg-blue-500" />
