@@ -71,52 +71,59 @@ class Builder {
 
 	// Event Handlers
 	// GLOBAL & LIFECYCLE
-	onInit = () => {}; // console.log;
-	onError = () => {}; // console.log;
-	onDBLClick = () => {}; // console.log;
+	onInit = () => {};
+	onError = () => {};
+	onDBLClick = () => {};
 
 	// NODES
-	onNodeClick = () => {}; // console.log;
-	onNodeContextMenu = () => {}; // console.log;
-	onNodeDragStart = () => {}; // console.log;
-	onNodeDragStop = () => {}; // console.log;
+	onNodeClick = () => {};
+	onNodeContextMenu = ({ event, node }: { event: MouseEvent; node: Node }) => {
+		event.preventDefault();
+		this.ctxMenuMode = {
+			type: 'node',
+			pos: { x: event.clientX, y: event.clientY },
+			node
+		};
+	};
+	onNodeDragStart = () => {};
+	onNodeDragStop = () => {};
 
 	// EDGES
-	onEdgeClick = () => {}; // console.log;
-	onEdgeContextMenu = () => {}; // console.log;
+	onEdgeClick = () => {};
+	onEdgeContextMenu = () => {};
 
 	// PANE (BACKGROUND)
 	onPaneClick = () => {
 		this.ctxMenuMode = null;
-	}; // console.log;
+	};
 	onPaneContextMenu = ({ event }: { event: MouseEvent }) => {
 		event.preventDefault();
 		this.ctxMenuMode = {
 			type: 'panel',
 			pos: { x: event.clientX, y: event.clientY }
 		};
-	}; // console.log;
+	};
 
 	// CONNECTIONS
-	onConnectStart = () => {}; // console.log;
-	onConnect = () => {}; // console.log;
-	onConnectEnd = () => {}; // console.log;
+	onConnectStart = () => {};
+	onConnect = () => {};
+	onConnectEnd = () => {};
 
 	// SELECTIONS
-	onSelectionClick = () => {}; // console.log;
-	onSelectionContextMenu = () => {}; // console.log;
-	onSelectionStart = () => {}; // console.log;
-	onSelectionEnd = () => {}; // console.log;
-	onSelectionChange = () => {}; // console.log;
-	onSelectionDragStart = () => {}; // console.log;
-	onSelectionDragStop = () => {}; // console.log;
+	onSelectionClick = () => {};
+	onSelectionContextMenu = () => {};
+	onSelectionStart = () => {};
+	onSelectionEnd = () => {};
+	onSelectionChange = () => {};
+	onSelectionDragStart = () => {};
+	onSelectionDragStop = () => {};
 
 	// VIEWPORT / MOVEMENT
-	onMoveStart = () => {}; // console.log;
-	onMoveEnd = () => {}; // console.log;
+	onMoveStart = () => {};
+	onMoveEnd = () => {};
 
 	// STATE / DELETION
-	onDelete = () => {}; // console.log;
+	onDelete = () => {};
 }
 
 export const builder = new Builder();

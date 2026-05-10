@@ -125,7 +125,7 @@
 			case 'add-node': {
 				const data: ScreenNode = {
 					title: 'This is a test',
-					image: { src: '/images/empire.png', alt: "This is the alt" },
+					image: { src: '/images/empire.png', alt: 'This is the alt' },
 					description: 'This is the description'
 				};
 				builder.addNode({
@@ -133,6 +133,12 @@
 					data,
 					position: pos
 				});
+				break;
+			}
+			case 'delete': {
+				if (builder.ctxMenuMode.type === 'node') {
+					builder.deleteNode(builder.ctxMenuMode.node);
+				}
 				break;
 			}
 		}
