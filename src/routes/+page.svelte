@@ -7,78 +7,51 @@
 	import Toolbar from '$lib/components/panels/Toolbar.svelte';
 	import ContextMenu from '$lib/components/panels/ContextMenu.svelte';
 
-	import {
-		onConnect,
-		onConnectEnd,
-		onConnectStart,
-		onDBLClick,
-		onDelete,
-		onEdgeClick,
-		onEdgeContextMenu,
-		onError,
-		onInit,
-		onMoveEnd,
-		onMoveStart,
-		onNodeClick,
-		onNodeContextMenu,
-		onNodeDragStart,
-		onNodeDragStop,
-		onPaneClick,
-		onPaneContextMenu,
-		onSelectionChange,
-		onSelectionClick,
-		onSelectionContextMenu,
-		onSelectionDragStart,
-		onSelectionDragStop,
-		onSelectionEnd,
-		onSelectionStart
-	} from '$lib/components/state/builder.svelte';
-
-	import { board } from '$lib/components/state/builder.svelte';
+	import { builder } from '$lib/components/state/builder.svelte';
 	import { nodeTypes } from '$lib/components/Nodes';
 </script>
 
 <div class="h-screen w-screen">
 	<SvelteFlow
-		nodeTypes={nodeTypes}
-		bind:nodes={board.nodes}
-		bind:edges={board.edges}
-		panOnDrag={board.panOnDrag}
-		selectionOnDrag={board.selectionOnDrag}
-		zoomOnDoubleClick={board.zoomOnDoubleClick}
+		{nodeTypes}
+		bind:nodes={builder.nodes}
+		bind:edges={builder.edges}
+		panOnDrag={builder.toolbarMode.type === 'pan'}
+		zoomOnDoubleClick={builder.toolbarMode.type === 'pan'}
+		selectionOnDrag={builder.toolbarMode.type === 'selection'}
 		// Event Handlers
 		// GLOBAL & LIFECYCLE
-		oninit={onInit}
-		onerror={onError}
-		ondblclick={onDBLClick}
+		oninit={builder.onInit}
+		onerror={builder.onError}
+		ondblclick={builder.onDBLClick}
 		// NODES
-		onnodeclick={onNodeClick}
-		onnodecontextmenu={onNodeContextMenu}
-		onnodedragstart={onNodeDragStart}
-		onnodedragstop={onNodeDragStop}
+		onnodeclick={builder.onNodeClick}
+		onnodecontextmenu={builder.onNodeContextMenu}
+		onnodedragstart={builder.onNodeDragStart}
+		onnodedragstop={builder.onNodeDragStop}
 		// EDGES
-		onedgeclick={onEdgeClick}
-		onedgecontextmenu={onEdgeContextMenu}
+		onedgeclick={builder.onEdgeClick}
+		onedgecontextmenu={builder.onEdgeContextMenu}
 		// PANE (BACKGROUND)
-		onpaneclick={onPaneClick}
-		onpanecontextmenu={onPaneContextMenu}
+		onpaneclick={builder.onPaneClick}
+		onpanecontextmenu={builder.onPaneContextMenu}
 		// CONNECTIONS
-		onconnectstart={onConnectStart}
-		onconnect={onConnect}
-		onconnectend={onConnectEnd}
+		onconnectstart={builder.onConnectStart}
+		onconnect={builder.onConnect}
+		onconnectend={builder.onConnectEnd}
 		// SELECTIONS
-		onselectionclick={onSelectionClick}
-		onselectioncontextmenu={onSelectionContextMenu}
-		onselectionstart={onSelectionStart}
-		onselectionend={onSelectionEnd}
-		onselectionchange={onSelectionChange}
-		onselectiondragstart={onSelectionDragStart}
-		onselectiondragstop={onSelectionDragStop}
+		onselectionclick={builder.onSelectionClick}
+		onselectioncontextmenu={builder.onSelectionContextMenu}
+		onselectionstart={builder.onSelectionStart}
+		onselectionend={builder.onSelectionEnd}
+		onselectionchange={builder.onSelectionChange}
+		onselectiondragstart={builder.onSelectionDragStart}
+		onselectiondragstop={builder.onSelectionDragStop}
 		// VIEWPORT / MOVEMENT
-		onmovestart={onMoveStart}
-		onmoveend={onMoveEnd}
+		onmovestart={builder.onMoveStart}
+		onmoveend={builder.onMoveEnd}
 		// STATE / DELETION
-		ondelete={onDelete}
+		ondelete={builder.onDelete}
 	>
 		<Background bgColor="#101828" patternColor="#f3f4f6" />
 		<ContextMenu />

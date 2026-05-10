@@ -1,149 +1,122 @@
 import type { Edge, Node } from '@xyflow/svelte';
+import type { ContextMenuMode, SidebarMode, ToolbarMode } from './type';
 
-let nodes = $state.raw<Node[]>([]);
-let edges = $state.raw<Edge[]>([]);
+class Builder {
+	nodes = $state.raw<Node[]>([]);
+	edges = $state.raw<Edge[]>([]);
 
-let canvasMode = $state('pan');
+	toolbarMode = $state<ToolbarMode>({ type: 'selection' });
+	sidebarMode = $state<SidebarMode>(null);
+	ctxMenuMode = $state<ContextMenuMode>(null);
 
-let panOnDrag = $derived<boolean>(canvasMode === 'pan');
-let selectionOnDrag = $state<boolean>(canvasMode === 'selection');
-let zoomOnDoubleClick = $state<boolean>(false);
-
-export const board = {
-	get nodes() {
-		return nodes;
-	},
-	set nodes(v) {
-		nodes = v;
-	},
-	get edges() {
-		return edges;
-	},
-	set edges(v) {
-		edges = v;
-	},
-	get panOnDrag() {
-		return panOnDrag;
-	},
-	set panOnDrag(v) {
-		panOnDrag = v;
-	},
-	get selectionOnDrag() {
-		return selectionOnDrag;
-	},
-	set selectionOnDrag(v) {
-		selectionOnDrag = v;
-	},
-	get zoomOnDoubleClick() {
-		return zoomOnDoubleClick;
-	},
-	set zoomOnDoubleClick(v) {
-		zoomOnDoubleClick = v;
-	},
-	get canvasMode() {
-		return canvasMode;
-	},
-	set canvasMode(v) {
-		canvasMode = v;
+	constructor() {
+		console.info('Builder Initilized Successfullty');
 	}
-};
 
-export const addNode = (node: Node) => {
-	nodes = [...nodes, node];
-};
+	addNode = (node: Node) => {
+		this.nodes = [...this.nodes, node];
+	};
+	addEdge = (edge: Edge) => {
+		this.edges = [...this.edges, edge];
+	};
 
-export const addEdge = (edge: Edge) => {
-	edges = [...edges, edge];
-};
+	deleteNode = (node: Node) => {
+		this.nodes = this.nodes.filter((prob) => prob.id !== node.id);
+	};
+	deleteEdge = (edge: Edge) => {
+		this.edges = this.edges.filter((prob) => prob.id !== edge.id);
+	};
 
-export const updateNode = (node: Node) => {
-	let found = false;
+	deleteSelectedNodes = () => {
+		this.nodes = this.nodes.filter((prob) => !prob.selected);
+	};
+	deleteSelectedEdges = () => {
+		this.edges = this.edges.filter((prob) => !prob.selected);
+	};
 
-	nodes = nodes.map((prob) => {
-		if (prob.id === node.id) {
-			found = true;
-			return node;
-		} else {
-			return prob;
-		}
-	});
+	deleteSelected = () => {
+		this.deleteSelectedNodes();
+		this.deleteSelectedEdges();
+	};
 
-	return found;
-};
+	updateNode = (node: Node) => {
+		let found = false;
 
-export const updateEdge = (edge: Edge) => {
-	let found = false;
+		this.nodes = this.nodes.map((prob) => {
+			if (prob.id === node.id) {
+				found = true;
+				return node;
+			} else {
+				return prob;
+			}
+		});
 
-	edges = edges.map((prob) => {
-		if (prob.id === edge.id) {
-			found = true;
-			return edge;
-		} else {
-			return prob;
-		}
-	});
+		return found;
+	};
 
-	return found;
-};
+	updateEdge = (edge: Edge) => {
+		let found = false;
 
-export const deleteNode = (node: Node) => {
-	nodes = nodes.filter((prob) => prob.id !== node.id);
-};
+		this.edges = this.edges.map((prob) => {
+			if (prob.id === edge.id) {
+				found = true;
+				return edge;
+			} else {
+				return prob;
+			}
+		});
 
-export const deleteEdge = (edge: Edge) => {
-	edges = edges.filter((prob) => prob.id !== edge.id);
-};
+		return found;
+	};
 
-export const deleteSelectedNodes = () => {
-	nodes = nodes.filter((prob) => !prob.selected);
-};
+	// Event Handlers
+	// GLOBAL & LIFECYCLE
+	onInit = () => {}; // console.log;
+	onError = () => {}; // console.log;
+	onDBLClick = () => {}; // console.log;
 
-export const deleteSelectedEdges = () => {
-	edges = edges.filter((prob) => !prob.selected);
-};
+	// NODES
+	onNodeClick = () => {}; // console.log;
+	onNodeContextMenu = () => {}; // console.log;
+	onNodeDragStart = () => {}; // console.log;
+	onNodeDragStop = () => {}; // console.log;
 
-export const deleteSelected = () => {
-	deleteSelectedNodes();
-	deleteSelectedEdges();
-};
+	// EDGES
+	onEdgeClick = () => {}; // console.log;
+	onEdgeContextMenu = () => {}; // console.log;
 
-// Event Handlers
-// GLOBAL & LIFECYCLE
-export const onInit = () => {}; // console.log;
-export const onError = () => {}; // console.log;
-export const onDBLClick = () => {}; // console.log;
+	// PANE (BACKGROUND)
+	onPaneClick = () => {
+		this.ctxMenuMode = null;
+	}; // console.log;
+	onPaneContextMenu = ({ event }:{ event: MouseEvent }) => {		
+		event.preventDefault();
+		this.ctxMenuMode = {
+			type: 'panel',
+			pos: { x: event.clientX, y: event.clientY }
+		};
+	}; // console.log;
 
-// NODES
-export const onNodeClick = () => {}; // console.log;
-export const onNodeContextMenu = () => {}; // console.log;
-export const onNodeDragStart = () => {}; // console.log;
-export const onNodeDragStop = () => {}; // console.log;
+	// CONNECTIONS
+	onConnectStart = () => {}; // console.log;
+	onConnect = () => {}; // console.log;
+	onConnectEnd = () => {}; // console.log;
 
-// EDGES
-export const onEdgeClick = () => {}; // console.log;
-export const onEdgeContextMenu = () => {}; // console.log;
+	// SELECTIONS
+	onSelectionClick = () => {}; // console.log;
+	onSelectionContextMenu = () => {}; // console.log;
+	onSelectionStart = () => {}; // console.log;
+	onSelectionEnd = () => {}; // console.log;
+	onSelectionChange = () => {}; // console.log;
+	onSelectionDragStart = () => {}; // console.log;
+	onSelectionDragStop = () => {}; // console.log;
 
-// PANE (BACKGROUND)
-export const onPaneClick = () => {}; // console.log;
-export const onPaneContextMenu = () => {}; // console.log;
+	// VIEWPORT / MOVEMENT
+	onMoveStart = () => {}; // console.log;
+	onMoveEnd = () => {}; // console.log;
 
-// CONNECTIONS
-export const onConnectStart = () => {}; // console.log;
-export const onConnect = () => {}; // console.log;
-export const onConnectEnd = () => {}; // console.log;
+	// STATE / DELETION
+	onDelete = () => {}; // console.log;
+}
 
-// SELECTIONS
-export const onSelectionClick = () => {}; // console.log;
-export const onSelectionContextMenu = () => {}; // console.log;
-export const onSelectionStart = () => {}; // console.log;
-export const onSelectionEnd = () => {}; // console.log;
-export const onSelectionChange = () => {}; // console.log;
-export const onSelectionDragStart = () => {}; // console.log;
-export const onSelectionDragStop = () => {}; // console.log;
-
-// VIEWPORT / MOVEMENT
-export const onMoveStart = () => {}; // console.log;
-export const onMoveEnd = () => {}; // console.log;
-
-// STATE / DELETION
-export const onDelete = () => {}; // console.log;
+export const builder = new Builder();
