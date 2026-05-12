@@ -25,7 +25,7 @@ export interface NodeContextMenuMode extends BaseContextMenuMode {
 export interface EdgeContextMenuMode extends BaseContextMenuMode {
 	type: 'edge';
 	pos: Position;
-	node: Edge;
+	edge: Edge;
 }
 
 export interface PanelContextMenuMode extends BaseContextMenuMode {

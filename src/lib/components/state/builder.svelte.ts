@@ -90,7 +90,14 @@ class Builder {
 
 	// EDGES
 	onEdgeClick = () => {};
-	onEdgeContextMenu = () => {};
+	onEdgeContextMenu = ({ event, edge }: { event: MouseEvent; edge: Edge }) => {
+		event.preventDefault();
+		this.ctxMenuMode = {
+			type: 'edge',
+			pos: { x: event.clientX, y: event.clientY },
+			edge
+		};
+	};
 
 	// PANE (BACKGROUND)
 	onPaneClick = () => {
@@ -111,7 +118,13 @@ class Builder {
 
 	// SELECTIONS
 	onSelectionClick = () => {};
-	onSelectionContextMenu = () => {};
+	onSelectionContextMenu = ({ event }: { event: MouseEvent; nodes: Node[] }) => {
+		event.preventDefault();
+		this.ctxMenuMode = {
+			type: 'selection',
+			pos: { x: event.clientX, y: event.clientY }
+		};
+	};
 	onSelectionStart = () => {};
 	onSelectionEnd = () => {};
 	onSelectionChange = () => {};

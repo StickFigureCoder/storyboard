@@ -136,8 +136,16 @@
 				break;
 			}
 			case 'delete': {
-				if (builder.ctxMenuMode.type === 'node') {
-					builder.deleteNode(builder.ctxMenuMode.node);
+				switch (builder.ctxMenuMode.type) {
+					case 'node':
+						builder.deleteNode(builder.ctxMenuMode.node);
+						break;
+					case 'edge':
+						builder.deleteEdge(builder.ctxMenuMode.edge);
+						break;
+					case 'selection':
+						builder.deleteSelected();
+						break;
 				}
 				break;
 			}
