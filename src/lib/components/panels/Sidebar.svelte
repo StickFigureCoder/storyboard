@@ -35,7 +35,19 @@
 	};
 
 	const onSave = () => {
-		console.log('Save Button Clicked');
+		if (sidebarMode?.type === 'node') {
+			const node = {
+				...sidebarMode.node,
+				data: {
+					...sidebarMode.node.data,
+					title,
+					description
+				}
+			};
+
+			builder.updateNode(node);
+			onClose();
+		}
 	};
 </script>
 
@@ -137,10 +149,11 @@
 					</button>
 				</div>
 			{:else}
-				<div
+				<button
 					role="button"
 					tabindex="0"
 					aria-label="Upload image — click or drag and drop"
+					onclick={() => { file?.click() }}
 					ondragover={(e: DragEvent) => {
 						e.preventDefault();
 						dragging = true;
@@ -174,7 +187,7 @@
 						Drop image or <span class="text-violet-400 underline underline-offset-2">browse</span>
 					</p>
 					<p class="text-[10.5px] text-gray-600">PNG · JPG · WebP</p>
-				</div>
+				</button>
 			{/if}
 
 			<input
