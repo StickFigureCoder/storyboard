@@ -12,6 +12,7 @@ class Builder {
 	constructor() {
 		console.info('Builder Initilized Successfullty');
 	}
+
 	addNode = (data: Omit<Node, 'id'>) => {
 		const node: Node = { ...data, id: crypto.randomUUID() };
 		this.nodes = [...this.nodes, node];
