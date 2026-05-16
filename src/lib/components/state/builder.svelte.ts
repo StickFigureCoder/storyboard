@@ -1,8 +1,9 @@
-import type { Edge, Node } from '@xyflow/svelte';
+import type { Edge } from '@xyflow/svelte';
 import type { ContextMenuMode, SidebarMode, ToolbarMode } from './type';
+import type { Nodes } from '../Nodes';
 
 class Builder {
-	nodes = $state.raw<Node[]>([]);
+	nodes = $state.raw<Nodes[]>([]);
 	edges = $state.raw<Edge[]>([]);
 
 	toolbarMode = $state<ToolbarMode>({ type: 'selection' });
@@ -13,15 +14,15 @@ class Builder {
 		console.info('Builder Initilized Successfullty');
 	}
 
-	addNode = (data: Omit<Node, 'id'>) => {
-		const node: Node = { ...data, id: crypto.randomUUID() };
+	addNode = (data: Omit<Nodes, 'id'>) => {
+		const node: Nodes = { ...data, id: crypto.randomUUID() };
 		this.nodes = [...this.nodes, node];
 	};
 	addEdge = (edge: Edge) => {
 		this.edges = [...this.edges, edge];
 	};
 
-	deleteNode = (node: Node) => {
+	deleteNode = (node: Nodes) => {
 		this.nodes = this.nodes.filter((prob) => prob.id !== node.id);
 	};
 	deleteEdge = (edge: Edge) => {
@@ -40,7 +41,7 @@ class Builder {
 		this.deleteSelectedEdges();
 	};
 
-	updateNode = (node: Node) => {
+	updateNode = (node: Nodes) => {
 		let found = false;
 
 		this.nodes = this.nodes.map((prob) => {
@@ -77,8 +78,10 @@ class Builder {
 	onDBLClick = () => {};
 
 	// NODES
-	onNodeClick = () => {};
-	onNodeContextMenu = ({ event, node }: { event: MouseEvent; node: Node }) => {
+	onNodeClick = ({ node }: { event: MouseEvent; node: Nodes }) => {
+		this.sidebarMode = { type: 'node', node };
+	};
+	onNodeContextMenu = ({ event, node }: { event: MouseEvent; node: Nodes }) => {
 		event.preventDefault();
 		this.ctxMenuMode = {
 			type: 'node',
@@ -119,7 +122,7 @@ class Builder {
 
 	// SELECTIONS
 	onSelectionClick = () => {};
-	onSelectionContextMenu = ({ event }: { event: MouseEvent; nodes: Node[] }) => {
+	onSelectionContextMenu = ({ event }: { event: MouseEvent; nodes: Nodes[] }) => {
 		event.preventDefault();
 		this.ctxMenuMode = {
 			type: 'selection',

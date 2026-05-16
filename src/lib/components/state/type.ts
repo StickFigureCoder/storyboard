@@ -1,4 +1,5 @@
-import type { Edge, Node } from '@xyflow/svelte';
+import type { Edge } from '@xyflow/svelte';
+import type { Nodes } from '../Nodes';
 
 export type ContextMenuMode =
 	| NodeContextMenuMode
@@ -19,7 +20,7 @@ export interface BaseContextMenuMode {
 export interface NodeContextMenuMode extends BaseContextMenuMode {
 	type: 'node';
 	pos: Position;
-	node: Node;
+	node: Nodes;
 }
 
 export interface EdgeContextMenuMode extends BaseContextMenuMode {
@@ -60,7 +61,7 @@ export interface BaseSidebarMode {
 
 export interface NodeSidebarMode extends BaseSidebarMode {
 	type: 'node';
-	node: Node;
+	node: Nodes;
 }
 
 export interface EdgeSidebarMode extends BaseSidebarMode {

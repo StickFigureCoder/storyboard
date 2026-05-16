@@ -8,12 +8,12 @@
 	import ContextMenu from '$lib/components/panels/ContextMenu.svelte';
 
 	import { builder } from '$lib/components/state/builder.svelte';
-	import { nodeTypes } from '$lib/components/Nodes';
+	import { nodes } from '$lib/components/Nodes';
 </script>
 
 <div class="h-screen w-screen">
 	<SvelteFlow
-		{nodeTypes}
+		nodeTypes={nodes}
 		bind:nodes={builder.nodes}
 		bind:edges={builder.edges}
 		panOnDrag={builder.toolbarMode.type === 'pan'}

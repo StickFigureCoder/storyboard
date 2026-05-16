@@ -19,7 +19,7 @@
 
 	import { outsideclick } from '$lib/hooks/outsideclick.svelte';
 	import { builder } from '../state/builder.svelte';
-	import type { ScreenNode } from '../Nodes/Screen/type';
+	import type { ScreenData } from '../Nodes/Screen/type';
 
 	type IconComponent = Component<LucideProps>;
 	interface MenuItem {
@@ -123,7 +123,7 @@
 
 		switch (action) {
 			case 'add-node': {
-				const data: ScreenNode = {
+				const data: ScreenData = {
 					title: 'This is a test',
 					image: { src: '/images/empire.png', alt: 'This is the alt' },
 					description: 'This is the description'
