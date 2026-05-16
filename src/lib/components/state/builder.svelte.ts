@@ -56,6 +56,10 @@ class Builder {
 		return found;
 	};
 
+	addUpdateNode = (node: Nodes) => {
+		if (!this.updateNode(node)) this.addNode(node);
+	};
+
 	updateEdge = (edge: Edge) => {
 		let found = false;
 

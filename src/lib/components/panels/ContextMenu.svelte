@@ -19,7 +19,6 @@
 
 	import { outsideclick } from '$lib/hooks/outsideclick.svelte';
 	import { builder } from '../state/builder.svelte';
-	import type { ScreenData } from '../Nodes/Screen/type';
 
 	type IconComponent = Component<LucideProps>;
 	interface MenuItem {
@@ -123,16 +122,19 @@
 
 		switch (action) {
 			case 'add-node': {
-				const data: ScreenData = {
-					title: 'This is a test',
-					image: { src: '/images/empire.png', alt: 'This is the alt' },
-					description: 'This is the description'
+				builder.sidebarMode = {
+					type: 'node',
+					node: {
+						id: crypto.randomUUID(),
+						type: 'screen',
+						data: {
+							title: '',
+							image: null,
+							description: ''
+						},
+						position: pos
+					}
 				};
-				builder.addNode({
-					type: 'screen',
-					data,
-					position: pos
-				});
 				break;
 			}
 			case 'delete': {

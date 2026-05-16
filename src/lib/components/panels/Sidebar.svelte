@@ -59,7 +59,7 @@
 				}
 			};
 
-			builder.updateNode(node);
+			builder.addUpdateNode(node);
 			onClose();
 		}
 	};
