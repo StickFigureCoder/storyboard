@@ -11,10 +11,10 @@ export interface ScreenProps extends NodeProps {
 }
 
 export interface ScreenData extends Record<string, unknown> {
-	image?: {
+	image: {
 		src: string;
 		alt: string;
-	};
+	} | null;
 	title: string;
 	description: string;
 }

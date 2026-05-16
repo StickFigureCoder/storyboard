@@ -20,10 +20,24 @@
 	});
 
 	// File Upload
-	let file = $state<HTMLInputElement | null>(null);
+	let fileRef = $state<HTMLInputElement | null>(null);
 	let dragging = $state(false);
 
-	const onFileInputChange = console.log;
+	const onFileInputChange = () => {
+		if (!fileRef) return;
+
+		const file = fileRef.files?.[0];
+
+		if (!file || !file.type.startsWith('image/')) return;
+
+		const reader = new FileReader();
+
+		reader.onload = (e) => {
+			image = { alt: file.name, src: e.target?.result as string };
+		};
+
+		reader.readAsDataURL(file);
+	};
 	const onDropZoneDrop = console.log;
 
 	// Funtions
@@ -39,8 +53,8 @@
 			const node = {
 				...sidebarMode.node,
 				data: {
-					...sidebarMode.node.data,
 					title,
+					image,
 					description
 				}
 			};
@@ -102,7 +116,7 @@
 
 	<!-- Body -->
 	<div
-		class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-700 flex flex-1 flex-col gap-5 overflow-y-auto px-5 py-5"
+		class="flex flex-1 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent flex-col gap-5 overflow-y-auto px-5 py-5"
 	>
 		<!-- Title -->
 		<div class="flex flex-col gap-1.5">
@@ -150,10 +164,11 @@
 				</div>
 			{:else}
 				<button
-					role="button"
 					tabindex="0"
 					aria-label="Upload image — click or drag and drop"
-					onclick={() => { file?.click() }}
+					onclick={() => {
+						fileRef?.click();
+					}}
 					ondragover={(e: DragEvent) => {
 						e.preventDefault();
 						dragging = true;
@@ -191,7 +206,7 @@
 			{/if}
 
 			<input
-				bind:this={file}
+				bind:this={fileRef}
 				type="file"
 				accept="image/*"
 				class="hidden"
