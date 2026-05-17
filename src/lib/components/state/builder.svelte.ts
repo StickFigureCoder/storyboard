@@ -28,14 +28,12 @@ class Builder {
 	deleteEdge = (edge: Edge) => {
 		this.edges = this.edges.filter((prob) => prob.id !== edge.id);
 	};
-
 	deleteSelectedNodes = () => {
 		this.nodes = this.nodes.filter((prob) => !prob.selected);
 	};
 	deleteSelectedEdges = () => {
 		this.edges = this.edges.filter((prob) => !prob.selected);
 	};
-
 	deleteSelected = () => {
 		this.deleteSelectedNodes();
 		this.deleteSelectedEdges();
@@ -55,11 +53,6 @@ class Builder {
 
 		return found;
 	};
-
-	upsertNode = (node: Nodes) => {
-		if (!this.updateNode(node)) this.insertNode(node);
-	};
-
 	updateEdge = (edge: Edge) => {
 		let found = false;
 
@@ -77,6 +70,23 @@ class Builder {
 
 	upsertEdge = (edge: Edge) => {
 		if (!this.updateEdge(edge)) this.insertEdge(edge);
+	};
+	upsertNode = (node: Nodes) => {
+		if (!this.updateNode(node)) this.insertNode(node);
+	};
+
+	duplicateNode = (node: Nodes) => {
+		const newNode = {
+			id: crypto.randomUUID(),
+			position: { x: node.position.x + 200, y: node.position.y + 200 },
+			type: node.type,
+			data: node.data
+		};
+
+		this.insertNode(newNode);
+	};
+	duplicateSelection = () => {
+		
 	};
 
 	// Event Handlers

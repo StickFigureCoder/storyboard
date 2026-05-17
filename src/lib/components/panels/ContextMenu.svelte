@@ -151,6 +151,17 @@
 				}
 				break;
 			}
+			case 'duplicate': {
+				switch (builder.ctxMenuMode.type) {
+					case 'node':
+						builder.duplicateNode(builder.ctxMenuMode.node);
+						break;
+					case 'selection':
+						builder.duplicateSelection();
+						break;
+				}
+				break;
+			}
 		}
 	};
 </script>
