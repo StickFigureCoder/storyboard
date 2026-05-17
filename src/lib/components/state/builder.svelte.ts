@@ -14,11 +14,11 @@ class Builder {
 		console.info('Builder Initilized Successfullty');
 	}
 
-	addNode = (data: Omit<Nodes, 'id'>) => {
+	insertNode = (data: Omit<Nodes, 'id'>) => {
 		const node: Nodes = { ...data, id: crypto.randomUUID() };
 		this.nodes = [...this.nodes, node];
 	};
-	addEdge = (edge: Edge) => {
+	insertEdge = (edge: Edge) => {
 		this.edges = [...this.edges, edge];
 	};
 
@@ -56,8 +56,8 @@ class Builder {
 		return found;
 	};
 
-	addUpdateNode = (node: Nodes) => {
-		if (!this.updateNode(node)) this.addNode(node);
+	upsertNode = (node: Nodes) => {
+		if (!this.updateNode(node)) this.insertNode(node);
 	};
 
 	updateEdge = (edge: Edge) => {
@@ -73,6 +73,10 @@ class Builder {
 		});
 
 		return found;
+	};
+
+	upsertEdge = (edge: Edge) => {
+		if (!this.updateEdge(edge)) this.insertEdge(edge);
 	};
 
 	// Event Handlers
