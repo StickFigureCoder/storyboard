@@ -14,6 +14,7 @@
 		Scissors
 	} from '@lucide/svelte';
 	import type { Component } from 'svelte';
+	import { cn } from '$lib/utils/cn';
 
 	type Tool = 'select' | 'pan';
 	type LucideIcon = Component<{ size?: number; strokeWidth?: number }>;
@@ -75,22 +76,13 @@
 		'animation:tip-in 100ms ease forwards'
 	].join(';');
 
-	function activeStyle(): string {
-		return [
-			'background:rgba(99,179,237,0.15)',
-			'box-shadow:0 0 0 1px rgba(99,179,237,.25),inset 0 1px 0 rgba(144,205,244,.08)'
-		].join(';');
-	}
-
-	// ── Base Tailwind class strings ────────────────────────────
-	const BASE_BTN =
-		'relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent outline-none transition-[background,color,transform] duration-[120ms] ease-out active:scale-[0.91]';
-	const IDLE_BTN = `${BASE_BTN} text-gray-100/50 hover:bg-white/[0.07] hover:text-gray-100/95 active:bg-white/10`;
-	const ACTV_BTN = `${BASE_BTN} text-sky-300 hover:text-sky-200`;
-	const DNGR_BTN = `${BASE_BTN} text-gray-100/50 hover:text-orange-400`;
+	const activeInlineStyle = [
+		'background:rgba(99,179,237,0.15)',
+		'box-shadow:0 0 0 1px rgba(99,179,237,.25),inset 0 1px 0 rgba(144,205,244,.08)'
+	].join(';');
 </script>
 
-<!-- keyframe for tooltip — single global declaration, no scoped block needed -->
+<!-- keyframe for tooltip -->
 <svelte:head>
 	<style>
 		@keyframes tip-in {
@@ -110,8 +102,13 @@
 
 {#snippet btn(Icon: LucideIcon, label: string, tip: string, handler: () => void, active = false)}
 	<button
-		style={active ? activeStyle() : ''}
-		class={active ? ACTV_BTN : IDLE_BTN}
+		style={active ? activeInlineStyle : ''}
+		class={cn(
+			'relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent outline-none transition-[background,color,transform] duration-120 ease-out active:scale-[0.91]',
+			active
+				? 'text-sky-300 hover:text-sky-200'
+				: 'text-gray-100/50 hover:bg-white/[0.07] hover:text-gray-100/95 active:bg-white/10'
+		)}
 		aria-label={label}
 		onclick={handler}
 		onmouseenter={() => show(tip)}
@@ -123,7 +120,10 @@
 
 {#snippet dangerBtn(Icon: LucideIcon, label: string, tip: string, handler: () => void)}
 	<button
-		class={DNGR_BTN}
+		class={cn(
+			'relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent outline-none transition-[background,color,transform] duration-120 ease-out active:scale-[0.91]',
+			'text-gray-100/50 hover:text-orange-400'
+		)}
 		aria-label={label}
 		onclick={handler}
 		onmouseenter={(e) => {
@@ -158,13 +158,7 @@
 >
 	<!-- Tools -->
 	<div class="flex items-center gap-px">
-		{@render btn(
-			MousePointer2,
-			'Select tool',
-			'Select  V',
-			() => onToolChange('select'),
-			activeTool === 'select'
-		)}
+		{@render btn(MousePointer2, 'Select tool', 'Select  V', () => onToolChange('select'), activeTool === 'select')}
 		{@render btn(Hand, 'Pan tool', 'Pan  H', () => onToolChange('pan'), activeTool === 'pan')}
 	</div>
 

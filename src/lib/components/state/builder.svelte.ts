@@ -85,9 +85,7 @@ class Builder {
 
 		this.insertNode(newNode);
 	};
-	duplicateSelection = () => {
-		
-	};
+	duplicateSelection = () => {};
 
 	// Event Handlers
 	// GLOBAL & LIFECYCLE
@@ -96,10 +94,11 @@ class Builder {
 	onDBLClick = () => {};
 
 	// NODES
-	onNodeClick = ({ node }: { event: MouseEvent; node: Nodes }) => {
+	onNodeClick = ({ node }: { event: MouseEvent | TouchEvent; node: Nodes }) => {
 		this.sidebarMode = { type: 'node', node };
 	};
-	onNodeContextMenu = ({ event, node }: { event: MouseEvent; node: Nodes }) => {
+	onNodeContextMenu = ({ event, node }: { event: MouseEvent | TouchEvent; node: Nodes }) => {
+		if (!('clientX' in event)) return;
 		event.preventDefault();
 		this.ctxMenuMode = {
 			type: 'node',
@@ -112,7 +111,8 @@ class Builder {
 
 	// EDGES
 	onEdgeClick = () => {};
-	onEdgeContextMenu = ({ event, edge }: { event: MouseEvent; edge: Edge }) => {
+	onEdgeContextMenu = ({ event, edge }: { event: MouseEvent | TouchEvent; edge: Edge }) => {
+		if (!('clientX' in event)) return;
 		event.preventDefault();
 		this.ctxMenuMode = {
 			type: 'edge',
