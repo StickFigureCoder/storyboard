@@ -16,38 +16,22 @@
 	import type { Component } from 'svelte';
 	import { cn } from '$lib/utils/cn';
 
-	type Tool = 'select' | 'pan';
 	type LucideIcon = Component<{ size?: number; strokeWidth?: number }>;
 
-	interface Props {
-		activeTool?: Tool;
-		locked?: boolean;
-		onToolChange?: (tool: Tool) => void;
-		onZoomIn?: () => void;
-		onZoomOut?: () => void;
-		onFitView?: () => void;
-		onUndo?: () => void;
-		onRedo?: () => void;
-		onLockToggle?: () => void;
-		onCopy?: () => void;
-		onCut?: () => void;
-		onDelete?: () => void;
-	}
-
-	let {
-		activeTool = 'select',
-		locked = false,
-		onToolChange = () => {},
-		onZoomIn = () => {},
-		onZoomOut = () => {},
-		onFitView = () => {},
-		onUndo = () => {},
-		onRedo = () => {},
-		onLockToggle = () => {},
-		onCopy = () => {},
-		onCut = () => {},
-		onDelete = () => {}
-	}: Props = $props();
+	let activeTool = $state('select');
+	let locked = false;
+	let onToolChange = (tool: string) => {
+		activeTool = tool;
+	};
+	let onZoomIn = () => {};
+	let onZoomOut = () => {};
+	let onFitView = () => {};
+	let onUndo = () => {};
+	let onRedo = () => {};
+	let onLockToggle = () => {};
+	let onCopy = () => {};
+	let onCut = () => {};
+	let onDelete = () => {};
 
 	let tooltip = $state('');
 	let tooltipVisible = $state(false);
@@ -104,7 +88,7 @@
 	<button
 		style={active ? activeInlineStyle : ''}
 		class={cn(
-			'relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent outline-none transition-[background,color,transform] duration-120 ease-out active:scale-[0.91]',
+			'relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent transition-[background,color,transform] duration-120 ease-out outline-none active:scale-[0.91]',
 			active
 				? 'text-sky-300 hover:text-sky-200'
 				: 'text-gray-100/50 hover:bg-white/[0.07] hover:text-gray-100/95 active:bg-white/10'
@@ -121,7 +105,7 @@
 {#snippet dangerBtn(Icon: LucideIcon, label: string, tip: string, handler: () => void)}
 	<button
 		class={cn(
-			'relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent outline-none transition-[background,color,transform] duration-120 ease-out active:scale-[0.91]',
+			'relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent transition-[background,color,transform] duration-120 ease-out outline-none active:scale-[0.91]',
 			'text-gray-100/50 hover:text-orange-400'
 		)}
 		aria-label={label}
@@ -158,7 +142,13 @@
 >
 	<!-- Tools -->
 	<div class="flex items-center gap-px">
-		{@render btn(MousePointer2, 'Select tool', 'Select  V', () => onToolChange('select'), activeTool === 'select')}
+		{@render btn(
+			MousePointer2,
+			'Select tool',
+			'Select  V',
+			() => onToolChange('select'),
+			activeTool === 'select'
+		)}
 		{@render btn(Hand, 'Pan tool', 'Pan  H', () => onToolChange('pan'), activeTool === 'pan')}
 	</div>
 
