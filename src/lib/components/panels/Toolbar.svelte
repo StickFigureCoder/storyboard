@@ -15,17 +15,21 @@
 	} from '@lucide/svelte';
 	import type { Component } from 'svelte';
 	import { cn } from '$lib/utils/cn';
+	import { builder } from '../../store/builder.svelte';
+	import { useSvelteFlow } from '@xyflow/svelte';
 
 	type LucideIcon = Component<{ size?: number; strokeWidth?: number }>;
 
-	let activeTool = $state('select');
+	const { fitView } = useSvelteFlow();
+
+	let activeTool = $derived(builder.toolbarMode.type);
 	let locked = false;
-	let onToolChange = (tool: string) => {
-		activeTool = tool;
+	let onToolChange = (tool: 'selection' | 'pan') => {
+		builder.toolbarMode.type = tool;
 	};
 	let onZoomIn = () => {};
 	let onZoomOut = () => {};
-	let onFitView = () => {};
+	let onFitView = () => { fitView({ padding: 0.1, duration: 700 }) };
 	let onUndo = () => {};
 	let onRedo = () => {};
 	let onLockToggle = () => {};
@@ -146,8 +150,8 @@
 			MousePointer2,
 			'Select tool',
 			'Select  V',
-			() => onToolChange('select'),
-			activeTool === 'select'
+			() => onToolChange('selection'),
+			activeTool === 'selection'
 		)}
 		{@render btn(Hand, 'Pan tool', 'Pan  H', () => onToolChange('pan'), activeTool === 'pan')}
 	</div>

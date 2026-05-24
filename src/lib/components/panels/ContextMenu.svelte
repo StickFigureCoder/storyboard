@@ -18,7 +18,7 @@
 	} from '@lucide/svelte';
 
 	import { outsideclick } from '$lib/hooks/outsideclick.svelte';
-	import { builder } from '../state/builder.svelte';
+	import { builder } from '../../store/builder.svelte';
 
 	type IconComponent = Component<LucideProps>;
 	interface MenuItem {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { builder } from '../state/builder.svelte';
+	import { builder } from '../../store/builder.svelte';
 
 	// State
 	let open = $derived(!!builder.sidebarMode);

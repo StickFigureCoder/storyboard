@@ -6,9 +6,13 @@ class Builder {
 	nodes = $state.raw<Nodes[]>([]);
 	edges = $state.raw<Edge[]>([]);
 
+	// Panels Mode
 	toolbarMode = $state<ToolbarMode>({ type: 'selection' });
 	sidebarMode = $state<SidebarMode>(null);
 	ctxMenuMode = $state<ContextMenuMode>(null);
+
+	// Internal
+	toolSelected = $derived(this.toolbarMode.type);
 
 	constructor() {
 		console.info('Builder Initilized Successfullty');
@@ -98,8 +102,8 @@ class Builder {
 		this.sidebarMode = { type: 'node', node };
 	};
 	onNodeContextMenu = ({ event, node }: { event: MouseEvent | TouchEvent; node: Nodes }) => {
-		if (!('clientX' in event)) return;
 		event.preventDefault();
+		if (!('clientX' in event)) return;
 		this.ctxMenuMode = {
 			type: 'node',
 			pos: { x: event.clientX, y: event.clientY },
@@ -112,8 +116,8 @@ class Builder {
 	// EDGES
 	onEdgeClick = () => {};
 	onEdgeContextMenu = ({ event, edge }: { event: MouseEvent | TouchEvent; edge: Edge }) => {
-		if (!('clientX' in event)) return;
 		event.preventDefault();
+		if (!('clientX' in event)) return;
 		this.ctxMenuMode = {
 			type: 'edge',
 			pos: { x: event.clientX, y: event.clientY },
@@ -125,8 +129,9 @@ class Builder {
 	onPaneClick = () => {
 		this.ctxMenuMode = null;
 	};
-	onPaneContextMenu = ({ event }: { event: MouseEvent }) => {
+	onPaneContextMenu = ({ event }: { event: MouseEvent | TouchEvent }) => {
 		event.preventDefault();
+		if (!('clientX' in event)) return;
 		this.ctxMenuMode = {
 			type: 'panel',
 			pos: { x: event.clientX, y: event.clientY }
@@ -140,8 +145,9 @@ class Builder {
 
 	// SELECTIONS
 	onSelectionClick = () => {};
-	onSelectionContextMenu = ({ event }: { event: MouseEvent; nodes: Nodes[] }) => {
+	onSelectionContextMenu = ({ event }: { event: MouseEvent | TouchEvent; nodes: Nodes[] }) => {
 		event.preventDefault();
+		if (!('clientX' in event)) return;
 		this.ctxMenuMode = {
 			type: 'selection',
 			pos: { x: event.clientX, y: event.clientY }

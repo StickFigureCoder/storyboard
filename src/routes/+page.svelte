@@ -7,7 +7,7 @@
 	import Toolbar from '$lib/components/panels/Toolbar.svelte';
 	import ContextMenu from '$lib/components/panels/ContextMenu.svelte';
 
-	import { builder } from '$lib/components/state/builder.svelte';
+	import { builder } from '$lib/store/builder.svelte';
 	import { nodes } from '$lib/components/Nodes';
 </script>
 
