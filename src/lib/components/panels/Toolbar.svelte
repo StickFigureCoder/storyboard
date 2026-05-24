@@ -8,7 +8,7 @@
 		Undo2,
 		Redo2,
 		Lock,
-		Unlock,
+		LockOpen,
 		Trash2,
 		Copy,
 		Scissors
@@ -187,7 +187,7 @@
 	<!-- Lock -->
 	<div class="flex items-center gap-px">
 		{@render btn(
-			locked ? Lock : Unlock,
+			locked ? Lock : LockOpen,
 			locked ? 'Unlock canvas' : 'Lock canvas',
 			locked ? 'Unlock Canvas' : 'Lock Canvas',
 			onLockToggle,
