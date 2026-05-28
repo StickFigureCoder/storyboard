@@ -20,16 +20,18 @@
 
 	type LucideIcon = Component<{ size?: number; strokeWidth?: number }>;
 
-	const { fitView } = useSvelteFlow();
+	const { fitView, zoomIn, zoomOut } = useSvelteFlow();
 
 	let activeTool = $derived(builder.toolbarMode.type);
 	let locked = false;
 	let onToolChange = (tool: 'selection' | 'pan') => {
 		builder.toolbarMode.type = tool;
 	};
-	let onZoomIn = () => {};
-	let onZoomOut = () => {};
-	let onFitView = () => { fitView({ padding: 0.1, duration: 700 }) };
+	let onZoomIn = () => { zoomIn() };
+	let onZoomOut = () => { zoomOut() };
+	let onFitView = () => {
+		fitView({ padding: 0.1, duration: 700 });
+	};
 	let onUndo = () => {};
 	let onRedo = () => {};
 	let onLockToggle = () => {};

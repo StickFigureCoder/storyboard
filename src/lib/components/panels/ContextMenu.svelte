@@ -19,6 +19,7 @@
 
 	import { outsideclick } from '$lib/hooks/outsideclick.svelte';
 	import { builder } from '../../store/builder.svelte';
+	import { useSvelteFlow } from '@xyflow/svelte';
 
 	type IconComponent = Component<LucideProps>;
 	interface MenuItem {
@@ -34,6 +35,8 @@
 	type MenuSeparator = { separator: true };
 	type MenuEntry = MenuItem | MenuSeparator;
 	type ContextType = 'node' | 'edge' | 'panel' | 'selection';
+
+	const { fitView } = useSvelteFlow();
 
 	// prettier-ignore
 	const nodeMenu: MenuEntry[] = [
@@ -160,6 +163,10 @@
 						builder.duplicateSelection();
 						break;
 				}
+				break;
+			}
+			case 'fit-view': {
+				fitView({ padding: 0.1, duration: 700 });
 				break;
 			}
 		}
