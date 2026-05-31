@@ -1,51 +1,13 @@
 <script lang="ts">
 	import { uiManager } from '$lib/store/builder-ui.svelte';
+	import { getMenu, type MenuEntry } from './menu';
 
-	// ── Menu config ──────────────────────────────────────────────────────────
-	type MenuLabel = { type: 'label'; label: string };
-	type MenuItem = {
-		type: 'item';
-		label: string;
-		action: string;
-		shortcut?: string;
-		destructive?: boolean;
-	};
-	type MenuSeparator = { type: 'separator' };
-	type MenuSubmenu = { type: 'submenu'; label: string; children: MenuItem[] };
-	type MenuEntry = MenuLabel | MenuItem | MenuSeparator | MenuSubmenu;
-
-	const menu: MenuEntry[] = [
-		{ type: 'label', label: 'Node' },
-		{ type: 'item', label: 'Rename node', action: 'rename', shortcut: 'R' },
-		{ type: 'item', label: 'Duplicate', action: 'duplicate', shortcut: 'D' },
-		{ type: 'item', label: 'Inspect output', action: 'inspect' },
-
-		{ type: 'separator' },
-		{ type: 'label', label: 'Connect' },
-		{
-			type: 'submenu',
-			label: 'Add connection',
-			children: [
-				{ type: 'item', label: 'Connect to…', action: 'connect' },
-				{ type: 'item', label: 'New node here', action: 'new-node' }
-			]
-		},
-
-		{ type: 'separator' },
-		{ type: 'label', label: 'Run' },
-		{ type: 'item', label: 'Run from here', action: 'run', shortcut: '⌘↵' },
-		{ type: 'item', label: 'Re-run node', action: 'rerun' },
-
-		{ type: 'separator' },
-		{ type: 'item', label: 'Delete node', action: 'delete', shortcut: '⌫', destructive: true }
-	];
-
-	// ── State ────────────────────────────────────────────────────────────────
 	let open = $derived(!!uiManager.ctxMenu);
 	let x = $derived(uiManager.ctxMenu?.position.x ?? 0);
 	let y = $derived(uiManager.ctxMenu?.position.y ?? 0);
 	let submenu = $state<string | null>(null);
 	let submenuY = $state(0);
+	const menu: MenuEntry[] = $derived(getMenu(uiManager.ctxMenu?.type));
 
 	// The menu element — used to measure width for flyout offset
 	let menuEl = $state<HTMLDivElement | null>(null);
