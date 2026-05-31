@@ -72,6 +72,30 @@ class UIManager {
 		this.ctxMenu = null;
 		this.sidebar = null;
 	};
+
+	onPanelContextMenu = ({ event }: { event: MouseEvent }) => {
+		event.preventDefault();
+		this.resetState();
+		this.ctxMenu = { type: 'panel', position: { x: event.clientX, y: event.clientY } };
+	};
+
+	onNodeContextMenu = ({ event, node }: { event: MouseEvent; node: Node }) => {
+		event.preventDefault();
+		this.resetState();
+		this.ctxMenu = { type: 'node', position: { x: event.clientX, y: event.clientY }, node };
+	};
+
+	onEdgeContextMenu = ({ event, edge }: { event: MouseEvent; edge: Edge }) => {
+		event.preventDefault();
+		this.resetState();
+		this.ctxMenu = { type: 'edge', position: { x: event.clientX, y: event.clientY }, edge };
+	};
+
+	onSelectionContextMenu = ({ event }: { event: MouseEvent }) => {
+		event.preventDefault();
+		this.resetState();
+		this.ctxMenu = { type: 'selection' };
+	};
 }
 
 export const uiManager = new UIManager();
