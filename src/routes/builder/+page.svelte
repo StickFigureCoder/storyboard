@@ -4,6 +4,7 @@
 	import { contentManager } from '$lib/store/builder-content.svelte';
 	import { nodes } from '$lib/components/nodes/type';
 	import { uiManager } from '$lib/store/builder-ui.svelte';
+	import ContextMenu from '$lib/components/context-menu/index.svelte';
 
 	let toolbar = $derived(uiManager.toolbar);
 </script>
@@ -22,5 +23,6 @@
 		onselectioncontextmenu={uiManager.onSelectionContextMenu}
 	>
 		<Background bgColor="#2A2A2A" patternColor="#E8E8E8" />
+		<ContextMenu />
 	</SvelteFlow>
 </div>
