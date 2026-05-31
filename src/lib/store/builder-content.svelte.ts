@@ -5,4 +5,4 @@ class ContentManager {
 	edges = $state.raw<Edge[]>([]);
 }
 
-export const builder = new ContentManager();
+export const contentManager = new ContentManager();
