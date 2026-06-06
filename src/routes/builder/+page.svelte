@@ -1,15 +1,17 @@
 <script lang="ts">
 	import '@xyflow/svelte/dist/style.css';
-	
+
 	import { SvelteFlow, Background } from '@xyflow/svelte';
-	
+
 	import { uiManager } from '$lib/store/builder-ui.svelte';
 	import { contentManager } from '$lib/store/builder-content.svelte';
-	
-	import ContextMenu from '$lib/components/context-menu/index.svelte';
-	import Sidebar from '$lib/components/sidebar/index.svelte';
+
 	import { nodes } from '$lib/components/nodes/type';
-	
+
+	import CTXMenu from '$lib/components/context-menu/index.svelte';
+	import Sidebar from '$lib/components/sidebar/index.svelte';
+	import Toolbar from '$lib/components/toolbar/index.svelte';
+
 	let toolbar = $derived(uiManager.toolbar);
 </script>
 
@@ -27,7 +29,8 @@
 		onselectioncontextmenu={uiManager.onSelectionContextMenu}
 	>
 		<Background bgColor="#2A2A2A" patternColor="#E8E8E8" />
-		<ContextMenu />
+		<CTXMenu />
 		<Sidebar />
+		<Toolbar />
 	</SvelteFlow>
 </div>
