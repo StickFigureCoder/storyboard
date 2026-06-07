@@ -12,7 +12,7 @@ export const downloadWorld = async (world: World) => {
 
 	const a = document.createElement('a');
 	a.href = url;
-	a.download = world.name.replaceAll(' ', '-') + '.' + EXTENSION;
+	a.download = world.name.toLowerCase().replaceAll(' ', '-') + '.' + EXTENSION;
 	document.body.appendChild(a);
 	a.click();
 	document.body.removeChild(a);
