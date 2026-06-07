@@ -30,7 +30,7 @@
 				uiManager.onNewNodeSidebar({ nodeType: 'screen', position });
 				break;
 			case 'fit-view':
-				fitView({ duration: 700, padding: { x: 1, y: 1 } });
+				fitView();
 				break;
 		}
 		close();
