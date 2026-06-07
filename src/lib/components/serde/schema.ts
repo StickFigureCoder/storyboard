@@ -17,6 +17,5 @@ export interface WorldSchema {
 	content: Content;
 }
 
-export const CURRENT_VERSION = '0.1.0';
 export const EXTENSION = 'storyboard';
 export const WORLD_FILE = 'world.json';
