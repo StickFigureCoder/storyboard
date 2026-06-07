@@ -16,6 +16,3 @@ export interface WorldSchema {
 	state: State;
 	content: Content;
 }
-
-export const EXTENSION = 'storyboard';
-export const WORLD_FILE = 'world.json';

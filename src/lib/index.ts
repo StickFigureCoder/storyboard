@@ -1,2 +1,5 @@
+import { version } from '../../package.json';
 // place files you want to import through the `$lib` alias in this folder.
-export const CURRENT_VERSION = '0.1.0';
+export const CURRENT_VERSION = version;
+export const EXTENSION = 'storyboard';
+export const WORLD_FILE = 'world.json';

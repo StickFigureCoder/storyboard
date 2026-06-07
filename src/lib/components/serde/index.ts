@@ -1,5 +1,6 @@
 import JSZip from 'jszip';
-import { EXTENSION, WORLD_FILE, type WorldSchema } from './schema';
+import type { WorldSchema } from './schema';
+import { EXTENSION, WORLD_FILE } from '$lib';
 
 interface World extends WorldSchema {
 	assets: File[];
