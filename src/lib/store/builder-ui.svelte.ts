@@ -46,6 +46,12 @@ interface PanelSidebar {
 	position: Position;
 }
 
+interface NewNodeSidebar {
+	type: 'new-node';
+	nodeType: string;
+	position: Position;
+}
+
 interface NodeSidebar {
 	type: 'node';
 	position: Position;
@@ -62,7 +68,7 @@ interface SelectionSidebar {
 	type: 'selection';
 }
 
-type Sidebar = PanelSidebar | NodeSidebar | EdgeSidebar | SelectionSidebar | null;
+type Sidebar = PanelSidebar | NodeSidebar | NewNodeSidebar | EdgeSidebar | SelectionSidebar | null;
 
 class UIManager {
 	ctxMenu = $state<ContextMenu>(null);
@@ -74,7 +80,7 @@ class UIManager {
 		this.sidebar = null;
 	};
 
-	onPanelContextMenu = ({ event }: { event: MouseEvent }) => {		
+	onPanelContextMenu = ({ event }: { event: MouseEvent }) => {
 		event.preventDefault();
 		this.resetState();
 		this.ctxMenu = { type: 'panel', position: { x: event.clientX, y: event.clientY } };
@@ -96,6 +102,14 @@ class UIManager {
 		event.preventDefault();
 		this.resetState();
 		this.ctxMenu = { type: 'selection', position: { x: event.clientX, y: event.clientY } };
+	};
+
+	onNewNodeSidebar = (params: { nodeType: string; position: Position }) => {
+		this.resetState();
+		this.sidebar = {
+			type: 'new-node',
+			...params
+		};
 	};
 }
 

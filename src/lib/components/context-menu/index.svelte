@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { uiManager } from '$lib/store/builder-ui.svelte';
+	import { useSvelteFlow } from '@xyflow/svelte';
 	import { getMenu, type MenuEntry } from './menu';
 
 	let open = $derived(!!uiManager.ctxMenu);
@@ -12,13 +13,26 @@
 	// The menu element — used to measure width for flyout offset
 	let menuEl = $state<HTMLDivElement | null>(null);
 
+	// Svelte Flow
+	const { fitView } = useSvelteFlow();
+
 	function close() {
 		uiManager.ctxMenu = null;
 		submenu = null;
 	}
 
 	function handleAction(action: string) {
-		console.log('Action:', action);
+		const position = uiManager.ctxMenu?.position;
+
+		if (!position) return;
+		switch (action) {
+			case 'new-screen':
+				uiManager.onNewNodeSidebar({ nodeType: 'screen', position });
+				break;
+			case 'fit-view':
+				fitView({ duration: 700, padding: { x: 1, y: 1 } });
+				break;
+		}
 		close();
 	}
 
