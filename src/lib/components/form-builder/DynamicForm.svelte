@@ -1,7 +1,10 @@
 <script lang="ts">
+	import { setContext } from 'svelte';
 	import FormStack from './FormStack.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import type { FieldConfig } from './types';
+	import type { ErrorTree, FieldConfig, FormStackContext } from './types';
+	import { FORM_STACK_REGISTER } from './types';
+	import { validateFields, hasErrors, findFirstErrorPath } from './validation';
 
 	let {
 		fields,
@@ -19,34 +22,37 @@
 		return '';
 	}
 
-	// FIX: this was `$derived(...)` in the previous pass, which is wrong here —
-	// $derived recomputes from its dependencies and child bindings writing into
-	// values[field.name] won't persist the way they need to. Use the $state +
-	// IIFE pattern from the gotchas table instead (avoids the "stale reference
-	// in $props context" warning while still giving a real mutable $state object).
+	// $state + IIFE pattern — see Svelte 5 gotchas. Required so child bindings
+	// (including deep group-item mutations) durably write back into this object.
 	let values = $state<Record<string, unknown>>(
 		(() => Object.fromEntries(fields.map((f) => [f.name, makeDefault(f)])))()
 	);
 
-	let errors = $state<Record<string, string | null>>({});
+	let errors = $state<ErrorTree>({});
 
-	// NOTE: still only validates top-level required fields, same as before.
-	// Per-item validation for group fields is the next planned item — it'll
-	// need to walk into values[f.name] (an array of item objects) for every
-	// field of type 'group' and check each item's required sub-fields.
-	function validate(): boolean {
-		const next: Record<string, string | null> = {};
-		for (const field of fields) {
-			if (field.required && !values[field.name]) {
-				next[field.name] = `${field.label} is required`;
-			}
-		}
-		errors = next;
-		return Object.values(errors).every((e) => !e);
-	}
+	// FormStack is a child/descendant, so it can't be reached via getContext
+	// from here (context flows down, not up). Instead, provide a registration
+	// callback that FormStack calls during its own init to hand back its
+	// navigation API.
+	let stackApi: Pick<FormStackContext, 'goToPath'> | undefined;
+	setContext(FORM_STACK_REGISTER, (api: Pick<FormStackContext, 'goToPath'>) => {
+		stackApi = api;
+	});
 
 	function handleSubmit() {
-		if (validate()) onsubmit(values);
+		const tree = validateFields(fields, values);
+		errors = tree;
+
+		if (hasErrors(tree)) {
+			// Root-level required-field errors show inline automatically (errors
+			// is reactive and read by FormStack/FormField). If the only problems
+			// are inside a group item that isn't currently open, navigate there.
+			const path = findFirstErrorPath(fields, tree);
+			if (path) stackApi?.goToPath(path);
+			return;
+		}
+
+		onsubmit(values);
 	}
 </script>
 

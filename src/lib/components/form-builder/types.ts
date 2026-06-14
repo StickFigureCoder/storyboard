@@ -42,11 +42,15 @@ export interface FieldConfig {
 	};
 }
 
+export type FieldError = string | ErrorTree[];
+export type ErrorTree = Record<string, FieldError>;
+
 export interface FormFrame {
 	id: string;
 	title: string;
 	fields: FieldConfig[];
 	values: Record<string, unknown>;
+	errors: ErrorTree;
 }
 
 /**
@@ -56,7 +60,10 @@ export interface FormFrame {
 export interface FormStackContext {
 	push: (frame: FormFrame) => void;
 	pop: () => void;
+	goToPath: (path: { fieldName: string; itemIndex: number }[]) => void;
 }
 
-/** Context key shared between FormStack and GroupField. */
+export const FORM_STACK_REGISTER = 'dynamic-form-stack-register';
 export const FORM_STACK_CONTEXT = 'dynamic-form-stack';
+
+export type FormStackRegister = (api: Pick<FormStackContext, 'goToPath'>) => void;

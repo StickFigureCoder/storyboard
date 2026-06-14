@@ -26,7 +26,7 @@
 			minItems: 1,
 			fields: [
 				{ name: 'name', label: 'Name', type: 'text', cols: 1 },
-				{ name: 'email', label: 'Email', type: 'email', cols: 1 }
+				{ name: 'email', label: 'Email', type: 'email', cols: 1, required: true }
 			]
 		}
 	];
